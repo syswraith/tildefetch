@@ -1,5 +1,4 @@
 import os
-import time
 import subprocess
 import curses
 from curses import wrapper
@@ -46,7 +45,7 @@ def main(stdscr):
     text_window.refresh()
     
     for line in range(len(club)):
-        ascii_window.addstr(line+(window_y-len(club)), 2, club[line].center(50))
+        ascii_window.addstr(line+(window_y-len(club)), 0, club[line].center(window_x-len(max(club, key=len))))
     ascii_window.refresh()
     
     stdscr.getkey()
