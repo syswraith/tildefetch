@@ -1,4 +1,5 @@
 import os
+import time
 import subprocess
 import curses
 from curses import wrapper
@@ -37,17 +38,21 @@ text_window = curses.newwin(window_y, window_x, window_y//2, window_x+1)
 ascii_window = curses.newwin(window_y, window_x, 0, 0)
 
 def main(stdscr):
-    curses.curs_set(0)
+    try:
+        curses.curs_set(0)
     
-    for info in range(len(sysinfo.keys())):
-        key = list(sysinfo.keys())[info]
-        text_window.addstr(info, 0, f'{key}: {sysinfo[key]}')
-    text_window.refresh()
+        for info in range(len(sysinfo.keys())):
+            key = list(sysinfo.keys())[info]
+            text_window.addstr(info, 0, f'{key}: {sysinfo[key]}')
+        text_window.refresh()
     
-    for line in range(len(club)):
-        ascii_window.addstr(line+(window_y-len(club)), 0, club[line].center(window_x-len(max(club, key=len))))
-    ascii_window.refresh()
-    
+        for line in range(len(club)):
+            ascii_window.addstr(line+(window_y-len(club)), 0, club[line].center(window_x-len(max(club, key=len))))
+            ascii_window.refresh()
+    except:
+        os.system("clear")
+        stdscr.addstr('"Your terminal is too small." ~ That\'s what she said')
+        stdscr.refresh()
     stdscr.getkey()
 
 curses.endwin() 
