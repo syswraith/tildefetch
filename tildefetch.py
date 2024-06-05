@@ -5,14 +5,12 @@ import curses
 from curses import wrapper
 
 club = """
-
  ███╗  ██████╗
 ██╔██╗██╔════╝
 ╚═╝╚═╝██║     
       ██║     
       ╚██████╗
        ╚═════╝
-
 """.splitlines()
 
 sysinfo = {}
@@ -34,26 +32,25 @@ window_y, window_x = curses.LINES, curses.COLS
 window_y = (window_y-1)//2 if window_y%2!=0 else window_y//2
 window_x = (window_x-1)//2 if window_x%2!=0 else window_x//2
 
-text_window = curses.newwin(window_y, window_x, window_y//2, window_x+1)
-ascii_window = curses.newwin(window_y, window_x, 0, 0)
+ascii_window = curses.newwin(window_y, window_x//2, 0, 0)
+text_window = curses.newwin(window_y, window_x//2, 0, window_x)
+
 
 def main(stdscr):
-    try:
-        curses.curs_set(0)
+       curses.curs_set(0)
+
+       for line in range(len(club)):
+           padding = len(club) + line
+           ascii_window.addstr(padding, 0, club[line].center(window_x//2-len(max(club, key=len))//2))
+           ascii_window.refresh()
     
-        for info in range(len(sysinfo.keys())):
-            key = list(sysinfo.keys())[info]
-            text_window.addstr(info, 0, f'{key}: {sysinfo[key]}')
-        text_window.refresh()
-    
-        for line in range(len(club)):
-            ascii_window.addstr(line+(window_y-len(club)), 0, club[line].center(window_x-len(max(club, key=len))))
-            ascii_window.refresh()
-    except:
-        os.system("clear")
-        stdscr.addstr('"Your terminal is too small." ~ That\'s what she said')
-        stdscr.refresh()
-    stdscr.getkey()
+       for info in range(len(sysinfo.keys())):
+           key = list(sysinfo.keys())[info]
+           padding = (window_y - len(sysinfo.keys())) + info
+           text_window.addstr(padding, 0, f'{key}: {sysinfo[key]}')
+       text_window.refresh()
+   
+       stdscr.getkey()
 
 curses.endwin() 
 wrapper(main)
